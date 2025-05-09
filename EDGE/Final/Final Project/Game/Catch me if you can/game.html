@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catch the Buttons Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-image: url('https://www.shutterstock.com/image-illustration/abstract-creative-design-layout-text-600nw-512538502.jpg');
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+      margin-bottom: 40px;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    }
+
+    #score {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5rem;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    .game-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .btn {
+      padding: 15px;
+      background-color: #ffc107;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.5s ease, background-color 0.6s;
+    }
+
+    .btn:hover {
+      background-color: #e0a800;
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      visibility: hidden;
+    }
+
+    @media (max-width: 600px) {
+      .btn {
+        padding: 12px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Catch the Buttons!</h1>
+  <div id="score">Score: 0</div>
+  <div class="game-container" id="gameContainer"></div>
+
+  <script>
+    const gameContainer = document.getElementById('gameContainer');
+    const scoreDisplay = document.getElementById('score');
+    let score = 0;
+    const totalButtons = 8;
+    const visibleCount = 6;
+
+    function createButtons() {
+      gameContainer.innerHTML = '';
+      for (let i = 0; i < totalButtons; i++) {
+        const btn = document.createElement('button');
+        btn.classList.add('btn', 'hidden');
+        btn.textContent = 'Catch!';
+        btn.addEventListener('click', () => {
+          if (!btn.classList.contains('hidden')) {
+            score++;
+            scoreDisplay.textContent = 'Score: ' + score;
+            btn.classList.add('hidden');
+          }
+        });
+        gameContainer.appendChild(btn);
+      }
+    }
+
+    function showRandomButtons() {
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(btn => btn.classList.add('hidden'));
+
+      const indexes = [];
+      while (indexes.length < visibleCount) {
+        const rand = Math.floor(Math.random() * totalButtons);
+        if (!indexes.includes(rand)) {
+          indexes.push(rand);
+        }
+      }
+
+      indexes.forEach(index => {
+        buttons[index].classList.remove('hidden');
+      });
+    }
+
+    createButtons();
+    showRandomButtons();
+    setInterval(showRandomButtons, 1000);
+  </script>
+
+</body>
+</html>
